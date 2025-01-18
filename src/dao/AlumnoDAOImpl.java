@@ -84,7 +84,7 @@ public class AlumnoDAOImpl implements AlumnoDAO{
 	}
 	
 	
-	@Override
+	
 	public Alumno getById(int id){
 
 		Alumno result = null;
@@ -143,7 +143,7 @@ public class AlumnoDAOImpl implements AlumnoDAO{
 	
 	
 	
-	@Override
+	
 	public int update(Alumno alumno){
 
 		String sql= """
@@ -174,7 +174,7 @@ public class AlumnoDAOImpl implements AlumnoDAO{
 
 	
 	
-	@Override
+	
 	public void delete(int id){
 		
 		String sql= "DELETE FROM alumno WHERE nia=? ";

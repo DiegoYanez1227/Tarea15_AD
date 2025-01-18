@@ -8,13 +8,13 @@ import model.Grupo;
 public interface AlumnoDAO {
 
 	
-	int aniadirAlumno(Alumno alumno);
+	int aniadirAlumno(Alumno alumno);					//
+			
+	int aniadirGrupo(Grupo grupo);						//
 	
-	int aniadirGrupo(Grupo grupo);
+	List<Alumno> obtenerTodosLosAlumnos();				//
 	
-	List<Alumno> obtenerTodosLosAlumnos();
-	
-	String guardarAlumnoBinario(List<Alumno> alumnos);
+	String guardarAlumnoBinario(List<Alumno> alumnos);	//
 	
 	void leerAlumnoJSON();
 	
