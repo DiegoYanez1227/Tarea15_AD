@@ -23,7 +23,7 @@ public class AlumnoJSON implements AlumnoDAO{
 	}
 
 	@Override
-	public int modificarNombrePorNia(int nia) {
+	public int modificarNombrePorNia(int nia, String nombre) {
 		// TODO Auto-generated method stub
 		return 0;
 	}
@@ -35,7 +35,7 @@ public class AlumnoJSON implements AlumnoDAO{
 	}
 
 	@Override
-	public void eliminarPorCurso(int curso) {
+	public void eliminarPorCurso(String curso) {
 		// TODO Auto-generated method stub
 		
 	}
