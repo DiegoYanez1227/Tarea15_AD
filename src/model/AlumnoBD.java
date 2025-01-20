@@ -125,7 +125,7 @@ public class AlumnoBD implements AlumnoDAO{
 	}
 
 	@Override
-	public void eliminarPorCurso(int curso) {
+	public void eliminarPorCurso(String curso) {
 
 		mostrarCursos();
 
@@ -134,7 +134,7 @@ public class AlumnoBD implements AlumnoDAO{
 				PreparedStatement sentencia = conexion.prepareStatement(sql);
 				ResultSet rs = sentencia.executeQuery(sql)) {
 			
-				sentencia.setInt(1, curso);
+				sentencia.setString(1, curso);
 				sentencia.executeQuery();
 				
 			int filasEliminadas = sentencia.executeUpdate();

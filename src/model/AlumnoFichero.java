@@ -134,7 +134,7 @@ public class AlumnoFichero implements AlumnoDAO{
 						eliminado = true; 
 					}
 				} catch (IOException e) {
-					
+
 					break;
 				}
 			}
@@ -160,9 +160,44 @@ public class AlumnoFichero implements AlumnoDAO{
 
 
 	@Override
-	public void eliminarPorCurso(int curso) {
-		// TODO Auto-generated method stub
+	public void eliminarPorCurso(String curso) {
+		String filePath = "alumnos.bin"; // Ruta del fichero binario
+		List<Alumno> alumnos = new ArrayList<>();
+		boolean eliminado = false;
 
+		// Leer todos los alumnos del fichero
+		try (FileInputStream fileIn = new FileInputStream(filePath);
+				ObjectInputStream objIn = new ObjectInputStream(fileIn)) {
+
+			while (true) {
+				try {
+					Alumno alumno = (Alumno) objIn.readObject();
+					if (alumno.getCurso() != curso) {
+						alumnos.add(alumno); 
+					} else {
+						eliminado = true; 
+					}
+				} catch (IOException e) {
+
+					break;
+				}
+			}
+		} catch (IOException | ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+
+		// Sobrescribir el fichero con los alumnos actualizados
+		if (eliminado) {
+			try (FileOutputStream fileOut = new FileOutputStream(filePath);
+					ObjectOutputStream objOut = new ObjectOutputStream(fileOut)) {
+
+				for (Alumno alumno : alumnos) {
+					objOut.writeObject(alumno);
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 
 

@@ -17,7 +17,7 @@ public interface AlumnoDAO {
 	
 	void eliminarPorNia(int nia);						//delete NIA
 	
-	void eliminarPorCurso(int curso);					//delete Curso
+	void eliminarPorCurso(String curso);					//delete Curso
 	
 	
 }
