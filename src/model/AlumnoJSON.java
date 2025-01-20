@@ -35,7 +35,7 @@ public class AlumnoJSON implements AlumnoDAO{
 	}
 
 	@Override
-	public void eliminarPorCurso(String curso) {
+	public void eliminarPorCurso(int curso) {
 		// TODO Auto-generated method stub
 		
 	}

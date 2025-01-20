@@ -26,7 +26,7 @@ public class AlumnoBD implements AlumnoDAO{
 			sentencia.setString(1, alumno.getNombre());
 			sentencia.setString(2, alumno.getApellidos());
 			sentencia.setDate(3, Date.valueOf(alumno.getFechaNacimiento()));
-	        sentencia.setString(4, String.valueOf(alumno.getGenero()));
+			sentencia.setString(4, String.valueOf(alumno.getGenero()));
 			sentencia.setString(5, alumno.getCiclo());
 			sentencia.setString(4, alumno.getCurso());
 			sentencia.setInt(5, alumno.getGrupo());
@@ -47,10 +47,10 @@ public class AlumnoBD implements AlumnoDAO{
 		int result=0;
 
 		try(Connection conexion= MyDataSource.getConnection();
-			PreparedStatement sentencia = conexion.prepareStatement(sql)){
+				PreparedStatement sentencia = conexion.prepareStatement(sql)){
 
 			sentencia.setString(1, grupo.getNombre());
-			
+
 
 			return result= sentencia.executeUpdate();
 		}catch(SQLException e) {
@@ -66,8 +66,8 @@ public class AlumnoBD implements AlumnoDAO{
 		List <Alumno> alumnos = new ArrayList<>();
 
 		try(Connection conexion = MyDataSource.getConnection();
-			PreparedStatement sentencia = conexion.prepareStatement(sql);
-			ResultSet rs = sentencia.executeQuery()){
+				PreparedStatement sentencia = conexion.prepareStatement(sql);
+				ResultSet rs = sentencia.executeQuery()){
 
 
 			Alumno alumno;
@@ -86,65 +86,92 @@ public class AlumnoBD implements AlumnoDAO{
 	}
 
 	@Override
-	public int modificarNombrePorNia(int nia) {
+	public int modificarNombrePorNia(int nia, String nombre) {
 		Alumno alumno=obtenerAlumno(nia);
-					// Actualizar los datos en la base de datos
-		String sql = "UPDATE alumnos SET nombre = ?, apellidos = ?, fechaNacimiento = ?, genero = ?, ciclo = ?, curso = ?, grupo = ? WHERE nia = ?";
-		
+		// Actualizar los datos en la base de datos
+		String sql = "UPDATE alumnos SET nombre = ? WHERE nia = ?";
+
 		int filasActualizadas=0;
 		try(Connection conexion = MyDataSource.getConnection();
 			PreparedStatement sentencia = conexion.prepareStatement(sql);
 			ResultSet rs = sentencia.executeQuery()){
-			
-			sentencia.setString(1, alumno.getNombre());
-			sentencia.setString(2, alumno.getApellidos());
-			sentencia.setDate(3, Date.valueOf(alumno.getFechaNacimiento()));
-			sentencia.setString(4, String.valueOf(alumno.getGenero()));
-			sentencia.setString(5, alumno.getCiclo());
-			sentencia.setString(6, alumno.getCurso());
-			sentencia.setInt(7, alumno.getGrupo());
-			sentencia.setInt(8, nia);
 
-			filasActualizadas = sentencia.executeUpdate();
-			if (filasActualizadas > 0) {
-				System.out.println("Alumno actualizado correctamente.");
-			} else {
-				System.out.println("Error inesperado al actualizar el alumno.");
-			}
+			sentencia.setString(1, nombre);
+			sentencia.setInt(2, nia);
+
+			return filasActualizadas= sentencia.executeUpdate();
+			
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		return filasActualizadas;
 	}
-	
-	
-	
+
+
 
 	@Override
-	public void eliminarPorNia(int id) {
-		// TODO Auto-generated method stub
-		
+	public void eliminarPorNia(int nia) {
+		String sql = "DELETE FROM alumno WHERE nia = ?";
+		try(Connection conexion = MyDataSource.getConnection();
+				PreparedStatement sentencia = conexion.prepareStatement(sql)){
+
+			sentencia.setInt(1, nia);
+			sentencia.executeQuery();
+			
+			int filasEliminadas = sentencia.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}		
 	}
 
 	@Override
-	public void eliminarPorCurso(String curso) {
-		// TODO Auto-generated method stub
-		
+	public void eliminarPorCurso(int curso) {
+
+		mostrarCursos();
+
+		String sql = "DELETE FROM alumno WHERE curso = ?";
+		try (Connection conexion = MyDataSource.getConnection();
+				PreparedStatement sentencia = conexion.prepareStatement(sql);
+				ResultSet rs = sentencia.executeQuery(sql)) {
+			
+				sentencia.setInt(1, curso);
+				sentencia.executeQuery();
+				
+			int filasEliminadas = sentencia.executeUpdate();
+		} catch (SQLException e) {
+			System.err.println("Error al eliminar alumnos: " + e.getMessage());
+		}
+
 	}
-	
-	
+
+	private void mostrarCursos() {
+		String sql = "SELECT DISTINCT curso FROM alumno";
+
+		try (Connection conexion = MyDataSource.getConnection();
+				PreparedStatement sentencia = conexion.prepareStatement(sql);
+				ResultSet rs = sentencia.executeQuery(sql)) {
+
+			while (rs.next()) {
+				String curso = rs.getString("curso");
+				System.out.println("- " + curso);
+			}
+		} catch (SQLException e) {
+			System.err.println("Error al obtener los cursos: " + e.getMessage());
+		}
+	}
+
 	public Alumno obtenerAlumno(int nia) {
-		
+
 		Alumno result = null;
 
 		String sql = "SELECT nia, nombre, apellidos, fecha_nacimiento, genero, ciclo, curso, grupo FROM alumno where nia=?";
 		try (Connection conexion = MyDataSource.getConnection();
-			PreparedStatement sentencia = conexion.prepareStatement(sql)){
+				PreparedStatement sentencia = conexion.prepareStatement(sql)){
 
 			sentencia.setInt(1, nia);
 
 			try(ResultSet rs = sentencia.executeQuery()){
-				
+
 				//usamos el if porque solo obtendremos un dato
 				if(rs.next()) {
 					result= new Alumno();

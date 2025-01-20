@@ -1,11 +1,11 @@
 package dao;
 
-import vista.Menu;
+import vista.VistaConsola;
 
 public class App {
 
 	public static void main(String[] args) {
-		new Menu().init();
+		new VistaConsola().init();
 	}
 
 }

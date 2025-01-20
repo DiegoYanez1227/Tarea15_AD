@@ -13,11 +13,11 @@ public interface AlumnoDAO {
 	
 	List<Alumno> obtenerTodosLosAlumnos();				//Get
 	
-	int modificarNombrePorNia(int nia);					//Update
+	int modificarNombrePorNia(int nia, String nombre);					//Update
 	
-	void eliminarPorNia(int id);						//delete NIA
+	void eliminarPorNia(int nia);						//delete NIA
 	
-	void eliminarPorCurso(String curso);				//delete Curso
+	void eliminarPorCurso(int curso);					//delete Curso
 	
 	
 }

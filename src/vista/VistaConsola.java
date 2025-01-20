@@ -15,13 +15,13 @@ import model.Alumno;
 import model.AlumnoDAO;
 import model.Grupo;
 
-public class Menu {
+public class VistaConsola {
 	
 	private KeyboardReader reader;
 	private AlumnoDAO dao;
 	private List<Alumno> alumnos= new ArrayList<Alumno>();
 	
-	public Menu() {
+	public VistaConsola() {
 		reader= new KeyboardReader();
 		dao= AlumnoDAOImpl.getInstance();
 	}
