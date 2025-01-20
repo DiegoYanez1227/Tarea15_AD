@@ -1,21 +1,25 @@
-package dao;
+package vista;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 import java.util.stream.IntStream;
 
+import dao.AlumnoDAOImpl;
 import model.Alumno;
+import model.AlumnoDAO;
 import model.Grupo;
 
 public class Menu {
 	
 	private KeyboardReader reader;
 	private AlumnoDAO dao;
+	private List<Alumno> alumnos= new ArrayList<Alumno>();
 	
 	public Menu() {
 		reader= new KeyboardReader();
@@ -31,16 +35,16 @@ public class Menu {
 		
 		switch(opcion) {
 		case 1: 
-			insertAlumno(); 
+			insertAlumno(); 	//
 			break;
 		case 2: 
-			insertGrupo();
+			insertGrupo();		//
 			break;
 		case 3: 
-			listAll();
+			listAll();			//
 			break;
 		case 4: 
-			update();
+			guardarFicheroBinario();
 			break;
 		case 5: 
 			delete();
@@ -110,7 +114,7 @@ public class Menu {
 		
 		System.out.println();
 		System.out.println();
-		
+		alumnos.add(new Alumno(nombre, apellidos, fechaNacimiento, genero.charAt(0), ciclo, curso, grupo));
 		dao.aniadirAlumno(new Alumno(nombre, apellidos, fechaNacimiento, genero.charAt(0), ciclo, curso, grupo));
 		
 	}

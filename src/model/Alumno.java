@@ -11,7 +11,7 @@ public class Alumno {
 	private char genero;
 	private String ciclo;
 	private String curso;
-	private String grupo;
+	private int grupo;
 	
 	
 	public Alumno() {
@@ -19,7 +19,7 @@ public class Alumno {
 	}
 
 
-	public Alumno(String nombre, String apellidos, LocalDate fechaNacimiento,char genero, String ciclo, String curso, String grupo) {
+	public Alumno(String nombre, String apellidos, LocalDate fechaNacimiento,char genero, String ciclo, String curso, int grupo) {
 		this.nombre = nombre;
 		this.apellidos = apellidos;
 		this.fechaNacimiento = fechaNacimiento;
@@ -28,7 +28,7 @@ public class Alumno {
 		this.curso = curso;
 	}
 	
-	public Alumno(int nia, String nombre, String apellidos, LocalDate fechaNacimiento,char genero, String ciclo, String curso, String grupo) {
+	public Alumno(int nia, String nombre, String apellidos, LocalDate fechaNacimiento,char genero, String ciclo, String curso, int grupo) {
 		this(nombre,apellidos,fechaNacimiento,genero, ciclo, curso, grupo);
 		this.nia=nia;
 	}
@@ -102,12 +102,12 @@ public class Alumno {
 		this.curso = curso;
 	}
 
-	public String getGrupo() {
+	public int getGrupo() {
 		return grupo;
 	}
 
 
-	public void setGrupo(String grupo) {
+	public void setGrupo(int grupo) {
 		this.grupo = grupo;
 	}
 	

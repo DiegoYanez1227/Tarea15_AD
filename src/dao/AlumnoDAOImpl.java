@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import model.Alumno;
+import model.AlumnoDAO;
 import model.Grupo;
 import pool.MyDataSource;
 
@@ -53,7 +54,7 @@ public class AlumnoDAOImpl implements AlumnoDAO{
 	        sentencia.setString(4, String.valueOf(alumno.getGenero()));
 			sentencia.setString(5, alumno.getCiclo());
 			sentencia.setString(4, alumno.getCurso());
-			sentencia.setString(5, alumno.getGrupo());
+			sentencia.setInt(5, alumno.getGrupo());
 
 			return result= sentencia.executeUpdate();
 		}catch(SQLException e) {
@@ -162,7 +163,7 @@ public class AlumnoDAOImpl implements AlumnoDAO{
 			sentencia.setLong(4, alumno.getGenero());
 			sentencia.setString(5, alumno.getCiclo());
 			sentencia.setString(5, alumno.getCurso());
-			sentencia.setString(5, alumno.getGrupo());
+			sentencia.setInt(5, alumno.getGrupo());
 			sentencia.setInt (6, alumno.getNia());
 
 			return result= sentencia.executeUpdate();
@@ -201,11 +202,11 @@ public class AlumnoDAOImpl implements AlumnoDAO{
 		alumno.setGenero(genero.charAt(0));
 		alumno.setCiclo(rs.getString("ciclo"));
 		alumno.setCurso(rs.getString("curso"));
-		alumno.setGrupo(rs.getString("grupo"));
+		alumno.setGrupo(Integer.parseInt(rs.getString("grupo")));
 	}
 
 
-	@Override
+
 	public String guardarAlumnoBinario(List<Alumno> alumnos) {
 		//Lógica para guardar alumnos en un fichero Binario
 		String mensaje="";
@@ -242,11 +243,7 @@ public class AlumnoDAOImpl implements AlumnoDAO{
 	}
 
 
-	@Override
-	public void leerAlumnoJSON() {
-		// TODO Auto-generated method stub
-		
-	}
+
 
 
 	@Override
@@ -270,16 +267,6 @@ public class AlumnoDAOImpl implements AlumnoDAO{
 	}
 
 
-	@Override
-	public void guardarGrupoJSON(List<Grupo> grupos) {
-		// TODO Auto-generated method stub
-		
-	}
 
 
-	@Override
-	public void leerGrupoJSON() {
-		// TODO Auto-generated method stub
-		
-	}
 }
