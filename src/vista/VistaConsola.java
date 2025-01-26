@@ -15,7 +15,7 @@ import model.Alumno;
 import model.AlumnoDAO;
 import model.Grupo;
 
-public class VistaConsola {
+public class VistaConsola implements IVista{
 	
 	private KeyboardReader reader;
 	private AlumnoDAO dao;
@@ -324,5 +324,48 @@ public class VistaConsola {
 			
 			return str;
 		}
+	}
+
+
+	@Override
+	public void mostrarAlumnos(ArrayList<Alumno> alumnos) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mostrarCursos(ArrayList<String> cursos) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public String pedirCurso() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Alumno pedirDatosAlumno() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Grupo pedirDatosGrupo() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String pedirString() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public int pedirInt() {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 }

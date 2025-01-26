@@ -1,5 +1,7 @@
 package controlador;
 
+import java.util.List;
+
 import model.*;
 import vista.*;
 
@@ -19,6 +21,30 @@ public class Controlador {
 	}
 	
 	public void ejecutar(AlumnoDAO modelo, VistaConsola vista) {
+		
+	}
+	
+	int aniadirAlumno(Alumno alumno){
+		
+	}				
+	
+	int aniadirGrupo(Grupo grupo) {
+		//Insert
+	}
+	
+	List<Alumno> obtenerTodosLosAlumnos(){
+		//Get
+	}
+	
+	int modificarNombrePorNia(int nia, String nombre) {
+		//Update
+	}
+	
+	void eliminarPorNia(int nia) {
+		//delete NIA
+	}
+	
+	void eliminarPorCurso(String curso) {
 		
 	}
 
