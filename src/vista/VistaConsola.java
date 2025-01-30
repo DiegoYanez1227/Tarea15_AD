@@ -7,6 +7,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 import java.util.StringTokenizer;
 import java.util.stream.IntStream;
 
@@ -17,13 +18,15 @@ import model.Grupo;
 
 public class VistaConsola implements IVista{
 	
+	Scanner sc= new Scanner(System.in);
+	
 	private KeyboardReader reader;
 	private AlumnoDAO dao;
 	private List<Alumno> alumnos= new ArrayList<Alumno>();
 	
 	public VistaConsola() {
 		reader= new KeyboardReader();
-		dao= AlumnoDAOImpl.getInstance();
+		
 	}
 	
 	public void init() {
@@ -33,49 +36,11 @@ public class VistaConsola implements IVista{
 		menu();
 		opcion= reader.nextInt();
 		
-		switch(opcion) {
-		case 1: 
-			insertAlumno(); 	//
-			break;
-		case 2: 
-			insertGrupo();		//
-			break;
-		case 3: 
-			listAll();			//
-			break;
-		case 4: 
-			guardarFicheroBinario();
-			break;
-		case 5: 
-			delete();
-			break;
-		case 6: 
-			delete();
-			break;
-		case 7: 
-			delete();
-			break;
-		case 8: 
-			delete();
-			break;
-		case 9: 
-			delete();
-			break;
-		case 10: 
-			delete();
-			break;
-		case 0: 
-			System.out.println("\n Saliendo del programa... \n");
-			break;
-		default: 
-			System.err.println("El número introducido no se corresponde con una instruccion valida");
-		}
 		
-		}while(opcion!=0);
 	}
 	
 	
-	public void menu() {
+	public int menu() {
 		System.out.println("SISTEMA DE GESTION DE ALUMNOS");
 		System.out.println("===============================");
 		System.out.println("-> Introduzca una opción de entre las siguientes");
@@ -91,9 +56,16 @@ public class VistaConsola implements IVista{
 		System.out.println("9. Guardar todos los alumnos en un fichero JSON");
 		System.out.println("10. Leer un fichero JSON de alumnos y guardarlos en la base de datos");
 		System.out.print("\nOpción:");
+		
+		System.out.println("Introduce una opcion");
+		int opcion= sc.nextInt();
+		
+		return opcion;
+		// pedir opcion
 	}
 	
-	public void insertAlumno() {
+	public Alumno pedirAlumno() {
+		
 		System.out.println("\nINSERIÓN DE UN NUEVO ALUMNO");
 		System.out.println("-------------------------------\n");
 		
@@ -114,10 +86,11 @@ public class VistaConsola implements IVista{
 		
 		System.out.println();
 		System.out.println();
-		alumnos.add(new Alumno(nombre, apellidos, fechaNacimiento, genero.charAt(0), ciclo, curso, grupo));
-		dao.aniadirAlumno(new Alumno(nombre, apellidos, fechaNacimiento, genero.charAt(0), ciclo, curso, grupo));
+		Alumno a=new Alumno(nombre, apellidos, fechaNacimiento, genero.charAt(0), ciclo, curso, grupo);
 		
+		return a;
 	}
+	
 	
 	public void insertGrupo() {
 		System.out.println("\nINSERIÓN DE UN NUEVO GRUPO");
@@ -328,13 +301,13 @@ public class VistaConsola implements IVista{
 
 
 	@Override
-	public void mostrarAlumnos(ArrayList<Alumno> alumnos) {
-		// TODO Auto-generated method stub
+	public void mostrarAlumnos(List<Alumno> alumnos) {
+		
 		
 	}
 
 	@Override
-	public void mostrarCursos(ArrayList<String> cursos) {
+	public void mostrarCursos(List<String> cursos) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -357,15 +330,29 @@ public class VistaConsola implements IVista{
 		return null;
 	}
 
+
+
 	@Override
-	public String pedirString() {
-		// TODO Auto-generated method stub
-		return null;
+	public void mostrarOperacionCorrecta() {
+		System.out.println("La operacion se ha realizado correctamente.");
+		
 	}
 
 	@Override
-	public int pedirInt() {
+	public void mostrarAlumno(Alumno alumno) {
+		// metodo de copiar mostrar
+		
+	}
+
+	@Override
+	public void mostrarRutaDeFichero(String ruta) {
+		System.out.println("La ruta del fichero es: "+ruta);
+		
+	}
+
+	@Override
+	public void mostrarCursos(ArrayList<String> cursos) {
 		// TODO Auto-generated method stub
-		return 0;
+		
 	}
 }

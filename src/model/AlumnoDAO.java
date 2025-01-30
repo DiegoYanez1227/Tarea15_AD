@@ -11,6 +11,12 @@ public interface AlumnoDAO {
 			
 	int aniadirGrupo(Grupo grupo);						//Insert
 	
+	/**
+	 * Devuelve la lista de todos los alumnos, 
+	 * si existe algun problema devolveremos nulo y en caso de 
+	 * no obtener nada devolvera una lista vacia.
+	 * @return
+	 */
 	List<Alumno> obtenerTodosLosAlumnos();				//Get
 	
 	int modificarNombrePorNia(int nia, String nombre);					//Update

@@ -1,13 +1,24 @@
 package vista;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import model.Alumno;
 import model.Grupo;
 
 public interface IVista {
 	
-	 void mostrarAlumnos(ArrayList<Alumno> alumnos);
+		int menu();
+		
+		Alumno pedirAlumno();
+		
+		void mostrarOperacionCorrecta();
+		
+		void mostrarRutaDeFichero(String ruta);
+		
+		void mostrarAlumno(Alumno alumno);
+		
+	 	void mostrarAlumnos(List<Alumno> alumnos);
 
 	    void mostrarCursos(ArrayList<String> cursos);
 
@@ -16,9 +27,8 @@ public interface IVista {
 	    Alumno pedirDatosAlumno();
 
 	    Grupo pedirDatosGrupo();
-	    
-	    String pedirString();
-	    
-	    int pedirInt();
+
+		void mostrarCursos(List<String> cursos);
+	   
 
 }

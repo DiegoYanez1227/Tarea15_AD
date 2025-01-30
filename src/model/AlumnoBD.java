@@ -63,12 +63,12 @@ public class AlumnoBD implements AlumnoDAO{
 	public List<Alumno> obtenerTodosLosAlumnos() {
 		String sql = "SELECT nia, nombre, apellidos, fecha_nacimiento, genero, ciclo, curso, grupo FROM alumno";
 
-		List <Alumno> alumnos = new ArrayList<>();
+		List <Alumno> alumnos = null;
 
 		try(Connection conexion = MyDataSource.getConnection();
 				PreparedStatement sentencia = conexion.prepareStatement(sql);
 				ResultSet rs = sentencia.executeQuery()){
-
+			alumnos= new ArrayList<>();
 
 			Alumno alumno;
 
@@ -80,7 +80,8 @@ public class AlumnoBD implements AlumnoDAO{
 				alumnos.add(alumno);
 			}
 		}catch(SQLException e) {
-			e.printStackTrace();
+			//Loggers
+			return null;
 		}
 		return alumnos;
 	}
