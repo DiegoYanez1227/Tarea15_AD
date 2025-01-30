@@ -14,6 +14,8 @@ import vista.*;
 
 public class Controlador {
 	
+	// pasar todo a metodos dentro  del switch 
+	
 	IFichero ficheroTXT= new FicheroTXT();
 	IFichero ficheroJSON= new FicheroJSON();
 	
@@ -44,7 +46,7 @@ public class Controlador {
 				}
 				break;
 			case 2: 
-				//vista.insertGrupo();		//
+				//vista.insertGrupo();		
 				break;
 			case 3: 
 				List<Alumno> alumnos=modelo.obtenerTodosLosAlumnos();	
