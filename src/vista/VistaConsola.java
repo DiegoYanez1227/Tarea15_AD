@@ -29,15 +29,7 @@ public class VistaConsola implements IVista{
 		
 	}
 	
-	public void init() {
-		int opcion;
-		do {
-			
-		menu();
-		opcion= reader.nextInt();
-		
-		
-	}
+	
 	
 	
 	public int menu() {
@@ -86,37 +78,54 @@ public class VistaConsola implements IVista{
 		
 		System.out.println();
 		System.out.println();
-		Alumno a=new Alumno(nombre, apellidos, fechaNacimiento, genero.charAt(0), ciclo, curso, grupo);
+		Alumno a=new Alumno( nombre,  apellidos,  fechaNacimiento, genero.charAt(0),  ciclo,  curso,  Integer.parseInt(curso));
 		
 		return a;
 	}
 	
-	
-	public void insertGrupo() {
+	@Override
+	public Grupo pedirGrupo() {
+		
 		System.out.println("\nINSERIÓN DE UN NUEVO GRUPO");
 		System.out.println("-------------------------------\n");
 		
 		System.out.print("Introduzca el nombre del grupo:"); 
 		String nombre= reader.nextLine();
 			
-		dao.aniadirGrupo(new Grupo(nombre));
-		
+		Grupo grupo= new Grupo(nombre);
+		return grupo;
 	}
 	
-	public void listAll() {
+	@Override
+	public void mostrarAlumno(Alumno alumno) {
+		System.out.printf("%2s %30s %8s %15s %10s %10s %2s\n",
+				alumno.getNia(),
+				alumno.getNombre()+" "+alumno.getApellidos(),
+				alumno.getFechaNacimiento().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")),
+				alumno.getGenero(),
+				alumno.getCiclo(),
+				alumno.getCurso(),
+				alumno.getGrupo()
+				);
+		
+	}
+
+	@Override
+	public void mostrarAlumnos(List<Alumno> alumnos) {
 		System.out.println("\n LISTADO DE TODOS LOS ALUMNOS");
 		System.out.println("----------------------------------");
-		
-		List<Alumno> result=dao.obtenerTodosLosAlumnos();
-		if(result.isEmpty()) {
+
+		if(alumnos.isEmpty()) {
 			System.out.println("No hay alumnos registrados en la base de datos");
 		}else {
-			printCabeceraTabelaAlumno();
-			result.forEach(this::printAlumno);
+			printCabeceraTablaAlumno();
+			alumnos.forEach(this::mostrarAlumno);
 			
 		}
-		System.out.println("\n");
+		System.out.println("\n");	
 	}
+	
+	
 	
 	private  void guardarFicheroBinario() {
 		//Lógica para guardar alumnos en un fichero Binario
@@ -136,25 +145,25 @@ public class VistaConsola implements IVista{
 		if(empleado == null) {
 			System.out.println("No hay empleados registrados en la base de datos con ese ID");
 		}else {
-			printCabeceraTabelaAlumno();
-			printAlumno(empleado);
+			printCabeceraTablaAlumno();
+			mostrarAlumno(empleado);
 		}
 		System.out.println("\n");
 	}
 	
-	public void update() {
+	public Alumno update() {
 		System.out.println("\nACTUALIZACIÓN DE UN ALUMNO");
 		System.out.println("-------------------------------\n");
 		
 		System.out.println("Introduzca el ID del alumno a buscar");
 		int id= reader.nextInt();
 		
-		Alumno alumno=dao.getById(id);		//NECESITAMOS HACER ESTO DENTRO DE OTRO METODO YA QUE ES LO QUE ULTIZAMOS DENTRO DE EL OBTENER X ID
+		Alumno alumno=dao.getById(id);		//NECESITAMOS HACER ESTO DENTRO DE OTRO METODO YA QUE ES LO QUE ULTIZAMOS DENTRO DEL OBTENER X ID
 		if(alumno==null) {
 			System.out.println("No hay alumnos registrados en la base de datos con ese id");
 		}else {
-			printCabeceraTabelaAlumno();
-			printAlumno(alumno);
+			printCabeceraTablaAlumno();
+			mostrarAlumno(alumno);
 			System.out.println("\n");
 			
 			System.out.printf("Introduzca el nombre(sin apellidos) del alumno (%s)",alumno.getNombre());
@@ -226,23 +235,11 @@ public class VistaConsola implements IVista{
 	
 	
 	
-	private void printCabeceraTabelaAlumno() {
-		System.out.printf("%2s %30s %8s %10s %25s", "ID", "NOMBRE","FEC.NAC.", "PUESTO", "EMAIL" );
+	private void printCabeceraTablaAlumno() {
+		System.out.printf("%2s %30s %8s %15s %10s %10s %2s", "CODIGO", "NOMBRE", "FEC.NAC.", "GENERO", "CICLO", "CURSO", "GRUPO" );
 		System.out.println("");
 		IntStream.range(1,100).forEach(x -> System.out.print("-"));
 		System.out.println("\n");
-	}
-	
-	private void printAlumno(Alumno alumno) {
-		System.out.printf("%2s %30s %9s %10s %25s\n",
-				alumno.getNia(),
-				alumno.getNombre()+" "+alumno.getApellidos(),
-				alumno.getFechaNacimiento().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")),
-				alumno.getGenero(),
-				alumno.getCiclo(),
-				alumno.getCurso(),
-				alumno.getGrupo()
-				);
 	}
 	
 	
@@ -262,7 +259,7 @@ public class VistaConsola implements IVista{
 					st= new StringTokenizer(br.readLine());
 				} catch (IOException e) {
 					
-				}
+				} 
 			}
 			
 			return st.nextToken();
@@ -298,13 +295,7 @@ public class VistaConsola implements IVista{
 			return str;
 		}
 	}
-
-
-	@Override
-	public void mostrarAlumnos(List<Alumno> alumnos) {
-		
-		
-	}
+	
 
 	@Override
 	public void mostrarCursos(List<String> cursos) {
@@ -312,37 +303,15 @@ public class VistaConsola implements IVista{
 		
 	}
 
-	@Override
-	public String pedirCurso() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Alumno pedirDatosAlumno() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Grupo pedirDatosGrupo() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 
 
 	@Override
-	public void mostrarOperacionCorrecta() {
-		System.out.println("La operacion se ha realizado correctamente.");
+	public void mostrarMensaje(String mensaje) {
+		System.out.println(mensaje);
 		
 	}
 
-	@Override
-	public void mostrarAlumno(Alumno alumno) {
-		// metodo de copiar mostrar
-		
-	}
+
 
 	@Override
 	public void mostrarRutaDeFichero(String ruta) {
@@ -354,5 +323,15 @@ public class VistaConsola implements IVista{
 	public void mostrarCursos(ArrayList<String> cursos) {
 		// TODO Auto-generated method stub
 		
+	}
+
+
+
+
+	@Override
+	public String pedirRuta() {
+		System.out.println(" Introduzca la ruta del fichero del cual quieras guardar los datos");
+		String ruta = sc.nextLine();
+		return ruta;
 	}
 }

@@ -12,23 +12,17 @@ public interface IVista {
 		
 		Alumno pedirAlumno();
 		
-		void mostrarOperacionCorrecta();
-		
-		void mostrarRutaDeFichero(String ruta);
+		Grupo pedirGrupo();
 		
 		void mostrarAlumno(Alumno alumno);
+			
+		void mostrarAlumnos(List<Alumno> alumnos);
 		
-	 	void mostrarAlumnos(List<Alumno> alumnos);
-
-	    void mostrarCursos(ArrayList<String> cursos);
-
-	    String pedirCurso();
-
-	    Alumno pedirDatosAlumno();
-
-	    Grupo pedirDatosGrupo();
+		void mostrarRutaDeFichero(String ruta);
 
 		void mostrarCursos(List<String> cursos);
 	   
-
+		void mostrarMensaje(String mensaje);
+		
+		String pedirRuta();
 }

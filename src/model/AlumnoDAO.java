@@ -2,14 +2,16 @@ package model;
 
 import java.util.List;
 
-import model.Empleado;
+
 
 public interface AlumnoDAO {
 
 	
-	int aniadirAlumno(Alumno alumno);					//Insert
+	int aniadirAlumno(Alumno alumno);						//Insert
 			
-	int aniadirGrupo(Grupo grupo);						//Insert
+	int aniadirAlumnos(List<Alumno> alumnos);				//Insert
+	
+	int aniadirGrupo(Grupo grupo);							//Insert
 	
 	/**
 	 * Devuelve la lista de todos los alumnos, 
@@ -17,11 +19,13 @@ public interface AlumnoDAO {
 	 * no obtener nada devolvera una lista vacia.
 	 * @return
 	 */
-	List<Alumno> obtenerTodosLosAlumnos();				//Get
+	List<Alumno> obtenerTodosLosAlumnos();					//Get
 	
-	int modificarNombrePorNia(int nia, String nombre);					//Update
+	Alumno obtenerAlumnoPorNIA(int nia);					//Get
 	
-	void eliminarPorNia(int nia);						//delete NIA
+	int modificarNombrePorNia(int nia, String nombre);		//Update
+	
+	void eliminarPorNia(int nia);							//delete NIA
 	
 	void eliminarPorCurso(String curso);					//delete Curso
 	

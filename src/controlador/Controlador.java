@@ -32,44 +32,59 @@ public class Controlador {
 	}
 
 	public void ejecutar(AlumnoDAO modelo, IVista vista) {
+		int opcion=1;
 		do {
-			int opcion =vista.menu();
+			opcion =vista.menu();
 
 			switch(opcion) {
 			case 1: 
+				//INSERTAR ALUMNO
 				Alumno a= vista.pedirAlumno(); 	
 				int numeroDeAlumnosInsertado=modelo.aniadirAlumno(a);
 				if(numeroDeAlumnosInsertado==1) {
-					vista.mostrarOperacionCorrecta();
+					vista.mostrarMensaje("El alumno ha sido insertado correctamente.");
 				}else {
-					vista.mostrarOperacionCorrecta();// cambiar a mostrar mensaje y pasarle un String 
+					vista.mostrarMensaje("El alumno no ha podido ser insertado debido a algun error.");
 				}
 				break;
 			case 2: 
-				//vista.insertGrupo();		
+				//INSERTAR GRUPO
+				Grupo grupo= vista.pedirGrupo();	
 				break;
 			case 3: 
+				//VISUALIZAR TODOS LOS ALUMNOS
 				List<Alumno> alumnos=modelo.obtenerTodosLosAlumnos();	
 				if(alumnos!=null) {
 					vista.mostrarAlumnos(alumnos);
 				}else {
-					vista.mostrarOperacionCorrecta();
+					vista.mostrarMensaje("Ha habido un error con la obtención de los datos desde la base de datos. ");
 				}	
 				break;
 			case 4: 
+				//GUARDAR DENTRO DE UN FICHERO RECOGIENDO DE LA BASE DE DATOS LA INFORMACION
 				List<Alumno> alumnosParaFichero=modelo.obtenerTodosLosAlumnos();	
 				
 				if(alumnosParaFichero!=null) {
 					String ruta=ficheroTXT.generarFichero(alumnosParaFichero);
 					vista.mostrarRutaDeFichero(ruta);
 				}else {
-					vista.mostrarOperacionCorrecta();
+					vista.mostrarMensaje("No se ha podido exportar los datos dentro de un fichero de texto.");
 				}
 					
 				
 				break;
 			case 5: 
-
+				//LEER ALUMNOS DESDE UN FICHERO DE TEXTO Y GUARDARLOS EN LA BASE DE DATOS
+				String ruta=vista.pedirRuta();
+				List<Alumno> alumnosDesdeFichero= ficheroTXT.leerFichero(ruta);
+				if(alumnosDesdeFichero!=null) {
+					vista.mostrarAlumnos(alumnosDesdeFichero);
+					modelo.aniadirAlumnos(alumnosDesdeFichero);
+					vista.mostrarMensaje("Los anteriores se han guardado correctamente dentro de la base de datos desde el fichero de texto.");
+				}else {
+					vista.mostrarMensaje("No se ha podido mostrar los alumnos desde el fichero de texto debido a un error.");
+				}
+				
 				break;
 			case 6: 
 

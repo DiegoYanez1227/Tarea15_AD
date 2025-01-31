@@ -34,10 +34,23 @@ public class AlumnoBD implements AlumnoDAO{
 			return result= sentencia.executeUpdate();
 		}catch(SQLException e) {
 			e.printStackTrace();
+			//LOGGER
 		}
 		return result;
 	}
 
+	@Override
+	public int aniadirAlumnos(List<Alumno> alumnos) {
+		
+		int result=0;
+		for (Alumno alumno : alumnos) {
+			aniadirAlumno(alumno);
+			result ++;
+		}
+		
+		return result;
+	}
+	
 	@Override
 	public int aniadirGrupo(Grupo grupo) {
 		String sql="""
@@ -196,5 +209,7 @@ public class AlumnoBD implements AlumnoDAO{
 		alumno.setCurso(rs.getString("curso"));
 		alumno.setGrupo(Integer.parseInt(rs.getString("grupo")));
 	}
+
+	
 
 }
