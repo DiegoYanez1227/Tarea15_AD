@@ -17,7 +17,7 @@ public class VistaConsola implements IVista{
 
 	private Scanner sc;
 	private KeyboardReader reader;
-	
+
 	public VistaConsola() {
 		reader= new KeyboardReader();
 		sc = new Scanner(System.in);
@@ -25,12 +25,12 @@ public class VistaConsola implements IVista{
 
 
 	/*
-	 
-	* Guardar todos los grupos (con toda su información como
+
+	 * Guardar todos los grupos (con toda su información como
 		atributos) en un fichero XML o JSON. Para cada grupo se
 		guardará también el listado de alumnos de ese grupo. Los datos
 		del alumno serán atributos en el XML.
-	* Leer un fichero XML o JSON de grupos (con en formato anterior)
+	 * Leer un fichero XML o JSON de grupos (con en formato anterior)
 		y guardarlos en la BD
 	 */
 
@@ -104,6 +104,13 @@ public class VistaConsola implements IVista{
 		return grupo;
 	}
 
+	private void printCabeceraTablaAlumno() {
+		System.out.printf("%2s %30s %8s %15s %10s %10s %2s", "CODIGO", "NOMBRE", "FEC.NAC.", "GENERO", "CICLO", "CURSO", "GRUPO" );
+		System.out.println("");
+		IntStream.range(1,100).forEach(x -> System.out.print("-"));
+		System.out.println("\n");
+	}
+
 	@Override
 	public void mostrarAlumno(Alumno alumno) {
 		System.out.printf("%2s %30s %8s %15s %10s %10s %2s\n",
@@ -133,29 +140,19 @@ public class VistaConsola implements IVista{
 		System.out.println("\n");	
 	}
 
-
-
-	private void printCabeceraTablaAlumno() {
-		System.out.printf("%2s %30s %8s %15s %10s %10s %2s", "CODIGO", "NOMBRE", "FEC.NAC.", "GENERO", "CICLO", "CURSO", "GRUPO" );
-		System.out.println("");
-		IntStream.range(1,100).forEach(x -> System.out.print("-"));
-		System.out.println("\n");
-	}
-
 	private void printCabeceraTablaGrupo() {
 		System.out.printf("%2s %10s ", "CODIGO GRUPO", "NOMBRE");
 		System.out.println("");
 		IntStream.range(1,100).forEach(x -> System.out.print("-"));
 		System.out.println("\n");
 	}
-	
 
 
 	@Override
 	public void mostrarCursos(List<String> cursos) {
 		for (String curso : cursos) {
-            System.out.println("- " + curso);
-        }
+			System.out.println("- " + curso);
+		}
 	}
 
 	@Override
@@ -165,9 +162,9 @@ public class VistaConsola implements IVista{
 				grupo.getNombre()
 				);
 
-		
+
 	}
-	
+
 	@Override
 	public void mostrarGrupos(List<Grupo> grupos) {
 		System.out.println("\n LISTADO DE TODOS LOS ALUMNOS");
@@ -181,12 +178,6 @@ public class VistaConsola implements IVista{
 
 		}
 		System.out.println("\n");	
-		
-	}
-
-	@Override
-	public void mostrarMensaje(String mensaje) {
-		System.out.println(mensaje);
 
 	}
 
@@ -198,10 +189,24 @@ public class VistaConsola implements IVista{
 
 
 	@Override
+	public void mostrarMensaje(String mensaje) {
+		System.out.println(mensaje);
+
+	}
+
+
+	@Override
 	public String pedirRuta() {
 		System.out.println(" Introduzca la ruta del fichero del cual quieras guardar los datos");
 		String ruta = sc.nextLine();
 		return ruta;
+	}
+
+	@Override
+	public int pedirNia() {
+		System.out.println(" Introduzca el nia del alumno ");
+		int nia= sc.nextInt();
+		return nia;
 	}
 
 
@@ -210,14 +215,6 @@ public class VistaConsola implements IVista{
 		System.out.println(" Introduzca el nuevo nombre del alumno");
 		String nombre = sc.nextLine();
 		return nombre;
-	}
-
-
-	@Override
-	public int pedirNia() {
-		System.out.println(" Introduzca el nia del alumno ");
-		int nia= sc.nextInt();
-		return nia;
 	}
 
 
@@ -237,10 +234,10 @@ public class VistaConsola implements IVista{
 		}
 		return false;
 	}
-	
-	
-	
-	
+
+
+
+
 	static class KeyboardReader{
 
 		private static final String FORMATO_FECHA = "dd/MM/yyyy";
@@ -271,5 +268,5 @@ public class VistaConsola implements IVista{
 
 
 
-	
+
 }

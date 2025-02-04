@@ -15,6 +15,11 @@ public class FicheroTXT {
 
 	private static final String RUTA_TXT = "grupos.txt";
 	
+	/**
+     * Método para guardar una lista de grupos en un archivo TXT.
+     * @param Lista de grupos leída del TXT
+     * @return Ruta del archivo TXT
+     */
 	public String generarFichero(List<Alumno> alumnos) {
 	    try (BufferedWriter writer = new BufferedWriter(new FileWriter(RUTA_TXT, true))) {
 	        for (Alumno alumno : alumnos) {
@@ -29,6 +34,11 @@ public class FicheroTXT {
 	    return RUTA_TXT;
 	}
 
+	/**
+     * Método para leer un archivo TXT y convertirlo en una lista de grupos.
+     * @param Ruta del archivo TXT
+     * @return Lista de grupos leída del TXT
+     */
 	public List<Alumno> leerFichero(String ruta) {
 	    List<Alumno> alumnos = new ArrayList<>();
 	    try (BufferedReader reader = new BufferedReader(new FileReader(ruta))) {
