@@ -2,23 +2,20 @@ package ficheros;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.ObjectOutputStream;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 import model.Alumno;
-import model.AppendingObjectOutputStream;
 
 public class FicheroTXT {
 
 	private static final String RUTA_TXT = "grupos.txt";
 	
-	public String escribirFicheroTxt(List<Alumno> alumnos) {
+	public String generarFichero(List<Alumno> alumnos) {
 	    try (BufferedWriter writer = new BufferedWriter(new FileWriter(RUTA_TXT, true))) {
 	        for (Alumno alumno : alumnos) {
 	            writer.write(alumno.getNia() + "," + alumno.getNombre() + "," + alumno.getApellidos() + "," + 
@@ -32,7 +29,7 @@ public class FicheroTXT {
 	    return RUTA_TXT;
 	}
 
-	public List<Alumno> leerFicheroTxt(String ruta) {
+	public List<Alumno> leerFichero(String ruta) {
 	    List<Alumno> alumnos = new ArrayList<>();
 	    try (BufferedReader reader = new BufferedReader(new FileReader(ruta))) {
 	        String line;
