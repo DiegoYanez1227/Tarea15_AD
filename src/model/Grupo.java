@@ -1,11 +1,13 @@
 package model;
 
+import java.util.List;
 import java.util.Objects;
 
 public class Grupo {
 	
 	private Integer id_grupo;
 	private String nombre;
+	private List<Alumno> alumnos;
 	
 	public Grupo() {}
 
@@ -35,6 +37,14 @@ public class Grupo {
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
 	}
+	
+	public List<Alumno> getAlumnos() {  // Agregar este método
+        return alumnos;
+    }
+
+    public void setAlumnos(List<Alumno> alumnos) {  // Agregar este método
+        this.alumnos = alumnos;
+    }
 
 	@Override
 	public int hashCode() {

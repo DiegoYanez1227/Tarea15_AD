@@ -34,6 +34,37 @@ public class FicheroJSON {
         }
     }
 
-   
+    /**
+     * Método genérico para leer un fichero JSON o XML según la extensión de la ruta.
+     * @param ruta Ruta del fichero (JSON o XML)
+     * @return Lista de grupos leída del archivo
+     */
+    public List<Grupo> leerFichero(String ruta) {
+        if (ruta.endsWith(".json")) {
+            return leerFicheroJSON(ruta);
+        } else if (ruta.endsWith(".xml")) {
+            return leerFicheroXML(ruta);
+        } else {
+            System.err.println("Formato de archivo no soportado: " + ruta);
+            return null;
+        }
+    }
+
+    /**
+     * Método para leer un archivo JSON y convertirlo en una lista de grupos.
+     * @param ruta Ruta del archivo JSON
+     * @return Lista de grupos leída del JSON
+     */
+    private List<Grupo> leerFicheroJSON(String ruta) {
+        try (FileReader reader = new FileReader(ruta)) {
+            Gson gson = new Gson();
+            return gson.fromJson(reader, new TypeToken<List<Grupo>>() {}.getType());
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    
 
 }

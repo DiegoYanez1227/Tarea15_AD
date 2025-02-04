@@ -1,63 +1,120 @@
 package ficheros;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import org.w3c.dom.*;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.*;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.time.LocalDate;
+
+import model.Alumno;
 import model.Grupo;
 
 public class FicheroXML {
+	
+	private static final String RUTA_XML = "grupos.json";
 
 	public String generarFichero(List<Grupo> grupos) {
-        guardarComoXML(grupos, "grupos.json");
-        return "Archivos generados correctamente: grupos.json y grupos.xml";
+        guardarComoXML(grupos);
+        return RUTA_XML;
     }
-	
+
+	/**
+     * Método para leer un archivo XML y convertirlo en una lista de grupos.
+     * @param ruta Ruta del archivo XML
+     * @return Lista de grupos leída del XML
+     */
+	private List<Grupo> leerFicheroXML(String ruta) {
+	    List<Grupo> grupos = new ArrayList<>();
+	    try {
+	        DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+	        DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+	        Document doc = dBuilder.parse(new File(ruta));
+	        doc.getDocumentElement().normalize();
+
+	        NodeList listaGrupos = doc.getElementsByTagName("Grupo");
+	        for (int i = 0; i < listaGrupos.getLength(); i++) {
+	            Node nodo = listaGrupos.item(i);
+	            if (nodo.getNodeType() == Node.ELEMENT_NODE) {
+	                Element elementoGrupo = (Element) nodo;
+	                int idGrupo = Integer.parseInt(elementoGrupo.getAttribute("id"));
+	                String nombreGrupo = elementoGrupo.getAttribute("nombre");
+	                Grupo grupo = new Grupo(idGrupo, nombreGrupo);
+
+	                NodeList listaAlumnos = elementoGrupo.getElementsByTagName("Alumno");
+	                for (int j = 0; j < listaAlumnos.getLength(); j++) {
+	                    Element elementoAlumno = (Element) listaAlumnos.item(j);
+	                    Alumno alumno = new Alumno(
+	                        Integer.parseInt(elementoAlumno.getAttribute("nia")),
+	                        elementoAlumno.getAttribute("nombre"),
+	                        elementoAlumno.getAttribute("apellidos"),
+	                        LocalDate.parse(elementoAlumno.getAttribute("fechaNacimiento")),
+	                        elementoAlumno.getAttribute("genero").charAt(0),
+	                        elementoAlumno.getAttribute("ciclo"),
+	                        elementoAlumno.getAttribute("curso"),
+	                        Integer.parseInt(elementoAlumno.getAttribute("grupo"))
+	                    );
+	                    grupo.getAlumnos().add(alumno);
+	                }
+	                grupos.add(grupo);
+	            }
+	        }
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        return null;
+	    }
+	    return grupos;
+	}
+
 	private void guardarComoXML(List<Grupo> grupos, String ruta) {
-        try {
-            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-            DocumentBuilder builder = factory.newDocumentBuilder();
-            Document doc = builder.newDocument();
+	    try {
+	        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+	        DocumentBuilder builder = factory.newDocumentBuilder();
+	        Document doc = builder.newDocument();
 
-            Element rootElement = doc.createElement("Grupos");
-            doc.appendChild(rootElement);
+	        Element rootElement = doc.createElement("Grupos");
+	        doc.appendChild(rootElement);
 
-            for (Grupo grupo : grupos) {
-                Element grupoElement = doc.createElement("Grupo");
-                rootElement.appendChild(grupoElement);
+	        for (Grupo grupo : grupos) {
+	            Element grupoElement = doc.createElement("Grupo");
+	            rootElement.appendChild(grupoElement);
 
-                // Atributos del grupo
-                grupoElement.setAttribute("id", String.valueOf(grupo.getId()));
-                grupoElement.setAttribute("nombre", grupo.getNombre());
+	            grupoElement.setAttribute("id", String.valueOf(grupo.getId_grupo()));
+	            grupoElement.setAttribute("nombre", grupo.getNombre());
 
-                // Lista de alumnos dentro del grupo
-                for (Alumno alumno : grupo.getAlumnos()) {
-                    Element alumnoElement = doc.createElement("Alumno");
-                    grupoElement.appendChild(alumnoElement);
+	            for (Alumno alumno : grupo.getAlumnos()) {
+	                Element alumnoElement = doc.createElement("Alumno");
+	                grupoElement.appendChild(alumnoElement);
 
-                    // Atributos del alumno
-                    alumnoElement.setAttribute("nia", String.valueOf(alumno.getNia()));
-                    alumnoElement.setAttribute("nombre", alumno.getNombre());
-                    alumnoElement.setAttribute("apellidos", alumno.getApellidos());
-                    alumnoElement.setAttribute("fechaNacimiento", alumno.getFechaNacimiento().toString());
-                    alumnoElement.setAttribute("genero", alumno.getGenero());
-                    alumnoElement.setAttribute("ciclo", alumno.getCiclo());
-                    alumnoElement.setAttribute("curso", alumno.getCurso());
-                    alumnoElement.setAttribute("grupo", alumno.getGrupo());
-                }
-            }
+	                alumnoElement.setAttribute("nia", String.valueOf(alumno.getNia()));
+	                alumnoElement.setAttribute("nombre", alumno.getNombre());
+	                alumnoElement.setAttribute("apellidos", alumno.getApellidos());
+	                alumnoElement.setAttribute("fechaNacimiento", alumno.getFechaNacimiento().toString());
+	                alumnoElement.setAttribute("genero", String.valueOf(alumno.getGenero()));
+	                alumnoElement.setAttribute("ciclo", alumno.getCiclo());
+	                alumnoElement.setAttribute("curso", alumno.getCurso());
+	                alumnoElement.setAttribute("grupo", String.valueOf(alumno.getGrupo()));
+	            }
+	        }
 
-            // Guardar XML en archivo
-            TransformerFactory transformerFactory = TransformerFactory.newInstance();
-            Transformer transformer = transformerFactory.newTransformer();
-            transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-            transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
+	        TransformerFactory transformerFactory = TransformerFactory.newInstance();
+	        Transformer transformer = transformerFactory.newTransformer();
+	        transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+	        transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
 
-            DOMSource source = new DOMSource(doc);
-            StreamResult result = new StreamResult(new FileWriter(ruta));
+	        DOMSource source = new DOMSource(doc);
+	        StreamResult result = new StreamResult(new File(RUTA_XML));
+	        transformer.transform(source, result);
 
-            transformer.transform(source, result);
-
-        } catch (ParserConfigurationException | TransformerException | IOException e) {
-            e.printStackTrace();
-        }
-    }
+	    } catch (ParserConfigurationException | TransformerException e) {
+	        e.printStackTrace();
+	    }
+	}
 }
