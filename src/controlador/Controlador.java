@@ -2,6 +2,9 @@ package controlador;
 
 import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import ficheros.*;
 import model.*;
 import vista.*;
@@ -11,8 +14,9 @@ import vista.*;
  * modificar datos de alumnos, guardar y cargar información desde archivos de texto y JSON, y eliminar datos.
  */
 public class Controlador {
-
-	// Instancias de objetos para manejo de archivos de texto y JSON
+	
+	// Instancias de objetos para manejo de archivos de texto y JSON y Objeto para la obtenencion de informacion dentro de un fichero LOGGER
+	static Logger Logger = LogManager.getLogger(Controlador.class);
 	FicheroTXT ficheroTXT = new FicheroTXT();
 	FicheroJSON ficheroJSON = new FicheroJSON();
 
@@ -89,70 +93,94 @@ public class Controlador {
 		} while (opcion != 0);
 	}
 
+	
+
+
 	/**
-	 * Lee los grupos desde un fichero JSON y los añade a la base de datos.
+	 * Añade un alumno a la base de datos.
 	 * @param modelo El modelo de datos que interactúa con la base de datos.
 	 * @param vista La vista que interactúa con el usuario.
 	 */
-	private void leerDesdeFicheroJSON(AlumnoDAO modelo, IVista vista) {
-		String rutaGrupos = vista.pedirRuta();
-		List<Grupo> gruposDesdeFichero = ficheroJSON.leerFichero(rutaGrupos);
-		if (gruposDesdeFichero != null) {
-			vista.mostrarGrupos(gruposDesdeFichero);
-			modelo.aniadirGrupos(gruposDesdeFichero);
-			vista.mostrarMensaje("Los anteriores se han guardado correctamente dentro de la base de datos desde el fichero de JSON.");
+	private void aniadirAlumno(AlumnoDAO modelo, IVista vista) {
+		Alumno alumno = vista.pedirAlumno();
+		int numeroDeAlumnosInsertados = modelo.aniadirAlumno(alumno);
+		if (numeroDeAlumnosInsertados == 1) {
+			vista.mostrarMensaje("El alumno ha sido insertado correctamente.");
+			Logger.info("El alumno ha sido insertado correctamente.");
 		} else {
-			vista.mostrarMensaje("No se ha podido mostrar los grupos desde el fichero de JSON debido a un error.");
+			vista.mostrarMensaje("El alumno no ha podido ser insertado debido a algún error.");
 		}
 	}
-
+	
 	/**
-	 * Guarda los grupos obtenidos desde la base de datos en un fichero JSON.
+	 * Añade un grupo a la base de datos.
 	 * @param modelo El modelo de datos que interactúa con la base de datos.
 	 * @param vista La vista que interactúa con el usuario.
 	 */
-	private void guardarEnFicheroJSON(AlumnoDAO modelo, IVista vista) {
-		List<Grupo> gruposParaFichero = modelo.obtenerTodosLosGrupos();
-		if (gruposParaFichero != null) {
-			String rutaGrupos = ficheroJSON.generarFichero(gruposParaFichero);
-			vista.mostrarRutaDeFichero(rutaGrupos);
+	private void aniadirGrupo(AlumnoDAO modelo, IVista vista) {
+		Grupo grupo = vista.pedirGrupo();
+		int numeroDeGruposInsertados = modelo.aniadirGrupo(grupo);
+		if (numeroDeGruposInsertados == 1) {
+			vista.mostrarMensaje("El grupo ha sido insertado correctamente.");
+			Logger.info("El grupo ha sido insertado correctamente.");
 		} else {
-			vista.mostrarMensaje("No se ha podido exportar los datos dentro de un fichero JSON.");
+			vista.mostrarMensaje("El grupo no ha podido ser insertado debido a algún error.");
 		}
 	}
-
+	
+	
 	/**
-	 * Elimina todos los alumnos pertenecientes a un curso.
+	 * Muestra la lista de todos los alumnos en la vista.
 	 * @param modelo El modelo de datos que interactúa con la base de datos.
 	 * @param vista La vista que interactúa con el usuario.
 	 */
-	private void eliminarPorCurso(AlumnoDAO modelo, IVista vista) {
-		List<String> cursos = modelo.obtenerCursos();
-		vista.mostrarCursos(cursos);
-		String curso = vista.pedirCurso();
-		if (vista.pedirConfirmacion()) {
-			modelo.eliminarPorCurso(curso);
-			vista.mostrarMensaje("Se ha eliminado con éxito todos los alumnos que pertenecen al curso " + curso);
+	private void listarAlumnos(AlumnoDAO modelo, IVista vista) {
+		List<Alumno> alumnos = modelo.obtenerTodosLosAlumnos();
+		if (alumnos != null) {
+			vista.mostrarAlumnos(alumnos);
+			Logger.info("Se han mostrado correctamente los Alumnos");
 		} else {
-			vista.mostrarMensaje("No se ha eliminado con éxito todos los alumnos que pertenecen al curso " + curso);
+			vista.mostrarMensaje("Ha habido un error con la obtención de los datos desde la base de datos.");
 		}
 	}
-
+	
+	
 	/**
-	 * Elimina un alumno de acuerdo a su NIA.
+	 * Guarda los alumnos obtenidos desde la base de datos en un fichero de texto.
 	 * @param modelo El modelo de datos que interactúa con la base de datos.
 	 * @param vista La vista que interactúa con el usuario.
 	 */
-	private void eliminarPorNia(AlumnoDAO modelo, IVista vista) {
-		int niaEliminar = vista.pedirNia();
-		if (vista.pedirConfirmacion()) {
-			modelo.eliminarPorNia(niaEliminar);
-			vista.mostrarMensaje("Se ha eliminado con éxito el alumno con NIA " + niaEliminar);
+	private void guardarEnFicheroTxT(AlumnoDAO modelo, IVista vista) {
+		List<Alumno> alumnosParaFichero = modelo.obtenerTodosLosAlumnos();
+		if (alumnosParaFichero != null) {
+			String ruta = ficheroTXT.generarFichero(alumnosParaFichero);
+			vista.mostrarRutaDeFichero(ruta);
+			Logger.info("Los alumnos se han guardado correctamente dentro el fichero de texto desde la base de datos.");
 		} else {
-			vista.mostrarMensaje("No se ha eliminado con éxito el alumno con NIA " + niaEliminar + " ya que no lo ha confirmado.");
+			vista.mostrarMensaje("No se ha podido exportar los datos dentro de un fichero de texto.");
 		}
 	}
-
+	
+	
+	/**
+	 * Lee los alumnos desde un fichero de texto y los guarda en la base de datos.
+	 * @param modelo El modelo de datos que interactúa con la base de datos.
+	 * @param vista La vista que interactúa con el usuario.
+	 */
+	private void leerDesdeFicheroTXT(AlumnoDAO modelo, IVista vista) {
+		String ruta = vista.pedirRuta();
+		List<Alumno> alumnosDesdeFichero = ficheroTXT.leerFichero(ruta);
+		if (alumnosDesdeFichero != null) {
+			vista.mostrarAlumnos(alumnosDesdeFichero);
+			modelo.aniadirAlumnos(alumnosDesdeFichero);
+			vista.mostrarMensaje("Los alumnos se han guardado correctamente dentro de la base de datos desde el fichero de texto.");
+			Logger.info("Los alumnos se han guardado correctamente dentro de la base de datos desde el fichero de texto.");
+		} else {
+			vista.mostrarMensaje("No se ha podido mostrar los alumnos desde el fichero de texto debido a un error.");
+		}
+	}
+	
+	
 	/**
 	 * Modifica el nombre de un alumno de acuerdo a su NIA.
 	 * @param modelo El modelo de datos que interactúa con la base de datos.
@@ -165,81 +193,78 @@ public class Controlador {
 		vista.mostrarAlumno(alumnoUpdate);
 		String nombre = vista.pedirNombre();
 		modelo.modificarNombrePorNia(nia, nombre);
+		Logger.info("Se ha modificado el nombre del alumno con nia "+nia+" a "+nombre);
 	}
-
+	
 	/**
-	 * Lee los alumnos desde un fichero de texto y los guarda en la base de datos.
+	 * Elimina un alumno de acuerdo a su NIA.
 	 * @param modelo El modelo de datos que interactúa con la base de datos.
 	 * @param vista La vista que interactúa con el usuario.
 	 */
-	private void leerDesdeFicheroTXT(AlumnoDAO modelo, IVista vista) {
-		String ruta = vista.pedirRuta();
-		List<Alumno> alumnosDesdeFichero = ficheroTXT.leerFichero(ruta);
-		if (alumnosDesdeFichero != null) {
-			vista.mostrarAlumnos(alumnosDesdeFichero);
-			modelo.aniadirAlumnos(alumnosDesdeFichero);
-			vista.mostrarMensaje("Los anteriores se han guardado correctamente dentro de la base de datos desde el fichero de texto.");
+	private void eliminarPorNia(AlumnoDAO modelo, IVista vista) {
+		int niaEliminar = vista.pedirNia();
+		if (vista.pedirConfirmacion()) {
+			modelo.eliminarPorNia(niaEliminar);
+			vista.mostrarMensaje("Se ha eliminado con éxito el alumno con NIA " + niaEliminar);
+			Logger.info("Se ha eliminado con éxito el alumno con NIA " + niaEliminar);
 		} else {
-			vista.mostrarMensaje("No se ha podido mostrar los alumnos desde el fichero de texto debido a un error.");
+			vista.mostrarMensaje("No se ha eliminado con éxito el alumno con NIA " + niaEliminar + " ya que no lo ha confirmado.");
 		}
 	}
-
+	
+	
 	/**
-	 * Guarda los alumnos obtenidos desde la base de datos en un fichero de texto.
+	 * Elimina todos los alumnos pertenecientes a un curso.
 	 * @param modelo El modelo de datos que interactúa con la base de datos.
 	 * @param vista La vista que interactúa con el usuario.
 	 */
-	private void guardarEnFicheroTxT(AlumnoDAO modelo, IVista vista) {
-		List<Alumno> alumnosParaFichero = modelo.obtenerTodosLosAlumnos();
-		if (alumnosParaFichero != null) {
-			String ruta = ficheroTXT.generarFichero(alumnosParaFichero);
-			vista.mostrarRutaDeFichero(ruta);
+	private void eliminarPorCurso(AlumnoDAO modelo, IVista vista) {
+		List<String> cursos = modelo.obtenerCursos();
+		vista.mostrarCursos(cursos);
+		String curso = vista.pedirCurso();
+		if (vista.pedirConfirmacion()) {
+			modelo.eliminarPorCurso(curso);
+			vista.mostrarMensaje("Se ha eliminado con éxito todos los alumnos que pertenecen al curso " + curso);
+			Logger.info("Se ha eliminado con éxito todos los alumnos que pertenecen al curso " + curso);
 		} else {
-			vista.mostrarMensaje("No se ha podido exportar los datos dentro de un fichero de texto.");
+			vista.mostrarMensaje("No se ha eliminado con éxito todos los alumnos que pertenecen al curso " + curso);
 		}
 	}
-
+	
+	
 	/**
-	 * Muestra la lista de todos los alumnos en la vista.
+	 * Guarda los grupos obtenidos desde la base de datos en un fichero JSON.
 	 * @param modelo El modelo de datos que interactúa con la base de datos.
 	 * @param vista La vista que interactúa con el usuario.
 	 */
-	private void listarAlumnos(AlumnoDAO modelo, IVista vista) {
-		List<Alumno> alumnos = modelo.obtenerTodosLosAlumnos();
-		if (alumnos != null) {
-			vista.mostrarAlumnos(alumnos);
+	private void guardarEnFicheroJSON(AlumnoDAO modelo, IVista vista) {
+		List<Grupo> gruposParaFichero = modelo.obtenerTodosLosGrupos();
+		if (gruposParaFichero != null) {
+			String rutaGrupos = ficheroJSON.generarFichero(gruposParaFichero);
+			vista.mostrarRutaDeFichero(rutaGrupos);
+			Logger.info("Se ha podido leer los alumnos de la base de datos e introducirlo dentro del fichero JSON.");
 		} else {
-			vista.mostrarMensaje("Ha habido un error con la obtención de los datos desde la base de datos.");
+			vista.mostrarMensaje("No se ha podido exportar los datos dentro de un fichero JSON.");
 		}
 	}
-
+	
+	
 	/**
-	 * Añade un grupo a la base de datos.
+	 * Lee los grupos desde un fichero JSON y los añade a la base de datos.
 	 * @param modelo El modelo de datos que interactúa con la base de datos.
 	 * @param vista La vista que interactúa con el usuario.
 	 */
-	private void aniadirGrupo(AlumnoDAO modelo, IVista vista) {
-		Grupo grupo = vista.pedirGrupo();
-		int numeroDeGruposInsertados = modelo.aniadirGrupo(grupo);
-		if (numeroDeGruposInsertados == 1) {
-			vista.mostrarMensaje("El grupo ha sido insertado correctamente.");
+	private void leerDesdeFicheroJSON(AlumnoDAO modelo, IVista vista) {
+		String rutaGrupos = vista.pedirRuta();
+		List<Grupo> gruposDesdeFichero = ficheroJSON.leerFichero(rutaGrupos);
+		if (gruposDesdeFichero != null) {
+			vista.mostrarGrupos(gruposDesdeFichero);
+			modelo.aniadirGrupos(gruposDesdeFichero);
+			vista.mostrarMensaje("Los anteriores se han guardado correctamente dentro de la base de datos desde el fichero de JSON.");
+			Logger.info("Se ha podido leer del fichero JSON e introducirlo dentro de la base de datos.");
 		} else {
-			vista.mostrarMensaje("El grupo no ha podido ser insertado debido a algún error.");
-		}
-	}
-
-	/**
-	 * Añade un alumno a la base de datos.
-	 * @param modelo El modelo de datos que interactúa con la base de datos.
-	 * @param vista La vista que interactúa con el usuario.
-	 */
-	private void aniadirAlumno(AlumnoDAO modelo, IVista vista) {
-		Alumno alumno = vista.pedirAlumno();
-		int numeroDeAlumnosInsertados = modelo.aniadirAlumno(alumno);
-		if (numeroDeAlumnosInsertados == 1) {
-			vista.mostrarMensaje("El alumno ha sido insertado correctamente.");
-		} else {
-			vista.mostrarMensaje("El alumno no ha podido ser insertado debido a algún error.");
+			vista.mostrarMensaje("No se ha podido mostrar los grupos desde el fichero de JSON debido a un error.");
+			
 		}
 	}
 }
