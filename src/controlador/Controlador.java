@@ -127,7 +127,7 @@ public class Controlador {
 	 * @param vista La vista que interactúa con el usuario.
 	 */
 	private void eliminarPorCurso(AlumnoDAO modelo, IVista vista) {
-		List<String> cursos = modelo.mostrarCursos();
+		List<String> cursos = modelo.obtenerCursos();
 		vista.mostrarCursos(cursos);
 		String curso = vista.pedirCurso();
 		if (vista.pedirConfirmacion()) {
