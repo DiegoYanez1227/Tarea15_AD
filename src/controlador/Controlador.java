@@ -10,8 +10,8 @@ public class Controlador {
 	
 	// pasar todo a metodos dentro  del switch 
 	
-	IFichero ficheroTXT= new FicheroTXT();
-	IFichero ficheroJSON= new FicheroJSON();
+	FicheroTXT ficheroTXT= new FicheroTXT();
+	FicheroJSON ficheroJSON= new FicheroJSON();
 	
 	public static void main(String[] args) {
 		
@@ -115,7 +115,14 @@ public class Controlador {
 				}
 				break;
 			case 9: 
-
+				List<Grupo> grupososParaFichero=modelo.obtenerTodosLosAlumnos();	
+				
+				if(grupososParaFichero!=null) {
+					String ruta=ficheroTXT.generarFichero(alumnosParaFichero);
+					vista.mostrarRutaDeFichero(ruta);
+				}else {
+					vista.mostrarMensaje("No se ha podido exportar los datos dentro de un fichero de texto.");
+				}
 				break;
 			case 10: 
 
