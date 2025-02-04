@@ -142,7 +142,12 @@ public class VistaConsola implements IVista{
 		System.out.println("\n");
 	}
 
-
+	private void printCabeceraTablaGrupo() {
+		System.out.printf("%2s %10s ", "CODIGO GRUPO", "NOMBRE");
+		System.out.println("");
+		IntStream.range(1,100).forEach(x -> System.out.print("-"));
+		System.out.println("\n");
+	}
 	
 
 
@@ -153,7 +158,31 @@ public class VistaConsola implements IVista{
         }
 	}
 
+	@Override
+	public void mostrarGrupo(Grupo grupo) {
+		System.out.printf("%2s %30s\n",
+				grupo.getId_grupo(),
+				grupo.getNombre()
+				);
 
+		
+	}
+	
+	@Override
+	public void mostrarGrupos(List<Grupo> grupos) {
+		System.out.println("\n LISTADO DE TODOS LOS ALUMNOS");
+		System.out.println("----------------------------------");
+
+		if(grupos.isEmpty()) {
+			System.out.println("No hay grupos registrados en la base de datos");
+		}else {
+			printCabeceraTablaGrupo();
+			grupos.forEach(this::mostrarGrupo);
+
+		}
+		System.out.println("\n");	
+		
+	}
 
 	@Override
 	public void mostrarMensaje(String mensaje) {
@@ -162,11 +191,9 @@ public class VistaConsola implements IVista{
 	}
 
 
-
 	@Override
 	public void mostrarRutaDeFichero(String ruta) {
 		System.out.println("La ruta del fichero es: "+ruta);
-
 	}
 
 
@@ -213,6 +240,7 @@ public class VistaConsola implements IVista{
 	
 	
 	
+	
 	static class KeyboardReader{
 
 		private static final String FORMATO_FECHA = "dd/MM/yyyy";
@@ -240,4 +268,8 @@ public class VistaConsola implements IVista{
 		}
 
 	}
+
+
+
+	
 }

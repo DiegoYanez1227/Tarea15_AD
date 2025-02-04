@@ -21,6 +21,10 @@ public interface IVista {
 		void mostrarRutaDeFichero(String ruta);
 		
 		void mostrarCursos(List<String> cursos);
+		
+		void mostrarGrupo(Grupo grupo);
+		
+		void mostrarGrupos(List<Grupo> grupos);
 	   
 		void mostrarMensaje(String mensaje);
 		

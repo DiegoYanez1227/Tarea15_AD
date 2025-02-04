@@ -3,6 +3,8 @@ package ficheros;
 import java.util.ArrayList;
 import java.util.List;
 
+import java.io.File;
+
 import org.w3c.dom.*;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -10,8 +12,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.*;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
-import java.io.FileWriter;
-import java.io.IOException;
+
 import java.time.LocalDate;
 
 import model.Alumno;
@@ -26,11 +27,16 @@ public class FicheroXML {
         return RUTA_XML;
     }
 
+	
+	public List<Grupo> leerFichero(String ruta) {
+        return leerFicheroXML(ruta);
+    }
 	/**
      * Método para leer un archivo XML y convertirlo en una lista de grupos.
-     * @param ruta Ruta del archivo XML
+     * @param Ruta del archivo XML
      * @return Lista de grupos leída del XML
      */
+
 	private List<Grupo> leerFicheroXML(String ruta) {
 	    List<Grupo> grupos = new ArrayList<>();
 	    try {
@@ -72,8 +78,12 @@ public class FicheroXML {
 	    }
 	    return grupos;
 	}
-
-	private void guardarComoXML(List<Grupo> grupos, String ruta) {
+	/**
+     * Método para guardar una lista de grupos en un archivo XML .
+     * @param Lista de grupos leída del XML
+     * @return Ruta del archivo XML
+     */
+	private void guardarComoXML(List<Grupo> grupos) {
 	    try {
 	        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 	        DocumentBuilder builder = factory.newDocumentBuilder();

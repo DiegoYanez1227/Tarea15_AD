@@ -71,6 +71,17 @@ public class AlumnoBD implements AlumnoDAO{
 		}
 		return result;
 	}
+	
+	@Override
+	public int aniadirGrupos(List<Grupo>grupos) {
+		int result=0;
+		for (Grupo grupo : grupos) {
+			aniadirGrupo(grupo);
+			result ++;
+		}
+
+		return result;
+	}
 
 	@Override
 	public List<Alumno> obtenerTodosLosAlumnos() {
@@ -192,6 +203,12 @@ public class AlumnoBD implements AlumnoDAO{
 		alumno.setCurso(rs.getString("curso"));
 		alumno.setGrupo(Integer.parseInt(rs.getString("grupo")));
 	}
+	
+	private void generarGrupo(ResultSet rs, Grupo grupo) throws SQLException {
+		grupo.setId_grupo(rs.getInt("nia"));
+		grupo.setNombre(rs.getString("nombre"));
+		
+	}
 
 	@Override
 	public Alumno obtenerAlumnoPorNIA(int nia) {
@@ -215,6 +232,32 @@ public class AlumnoBD implements AlumnoDAO{
 		}
 		return alumno;
 
+	}
+
+	@Override
+	public List<Grupo> obtenerTodosLosGrupos() {
+		String sql = "SELECT nia, nombre, apellidos, fecha_nacimiento, genero, ciclo, curso, grupo FROM alumno";
+
+		List <Grupo> grupos = null;
+
+		try(Connection conexion = MyDataSource.getConnection();
+				PreparedStatement sentencia = conexion.prepareStatement(sql);
+				ResultSet rs = sentencia.executeQuery()){
+			grupos= new ArrayList<Grupo>();
+
+			Grupo grupo;
+
+			while(rs.next()) {
+				grupo= new Grupo();
+				generarGrupo(rs, grupo);
+
+				grupos.add(grupo);
+			}
+		}catch(SQLException e) {
+			//Loggers
+			return null;
+		}
+		return grupos;
 	}
 
 

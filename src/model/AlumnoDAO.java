@@ -13,6 +13,8 @@ public interface AlumnoDAO {
 	
 	int aniadirGrupo(Grupo grupo);							//Insert
 	
+	
+	int aniadirGrupos(List<Grupo> alumnos);
 	/**
 	 * Devuelve la lista de todos los alumnos, 
 	 * si existe algun problema devolveremos nulo y en caso de 
@@ -20,6 +22,8 @@ public interface AlumnoDAO {
 	 * @return
 	 */
 	List<Alumno> obtenerTodosLosAlumnos();					//Get
+	
+	List<Grupo> obtenerTodosLosGrupos();
 	
 	Alumno obtenerAlumnoPorNIA(int nia);					//Get
 	
@@ -30,6 +34,8 @@ public interface AlumnoDAO {
 	void eliminarPorCurso(String curso);					//delete Curso
 	
 	List<String> mostrarCursos();
+	
+	
 	
 	
 }
