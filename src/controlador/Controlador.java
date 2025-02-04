@@ -44,6 +44,12 @@ public class Controlador {
 			case 2: 
 				//INSERTAR GRUPO
 				Grupo grupo= vista.pedirGrupo();	
+				int numeroDeGurposInsertado=modelo.aniadirGrupo(grupo);
+				if(numeroDeGurposInsertado==1) {
+					vista.mostrarMensaje("El grupo ha sido insertado correctamente.");
+				}else {
+					vista.mostrarMensaje("El grupo no ha podido ser insertado debido a algun error.");
+				}
 				break;
 			case 3: 
 				//VISUALIZAR TODOS LOS ALUMNOS
@@ -91,9 +97,9 @@ public class Controlador {
 				int niaEliminar= vista.pedirNia();
 				if(vista.pedirConfirmacion()) {
 					modelo.eliminarPorNia(niaEliminar);
-					vista.mostrarMensaje("Se ha efectuado el eliminado del alumno con nia "+niaEliminar);
+					vista.mostrarMensaje("Se ha eliminado con exito el alumno con nia "+niaEliminar);
 				}else {
-					vista.mostrarMensaje("No se ha efectuado el eliminado del alumno con nia "+niaEliminar+" ya que no lo ha confirmado");
+					vista.mostrarMensaje("No se ha eliminado con exito el alumno con nia "+niaEliminar+" ya que no lo ha confirmado");
 				}
 				break;
 			case 8: 
@@ -103,13 +109,10 @@ public class Controlador {
 				String curso= vista.pedirCurso();
 				if(vista.pedirConfirmacion()) {
 					modelo.eliminarPorCurso(curso);
-					vista.mostrarMensaje("Se ha eliminado con exito todos los alumnos que pertenecen a ");
+					vista.mostrarMensaje("Se ha eliminado con exito todos los alumnos que pertenecen al curso "+curso);
 				}else {
-					vista.mostrarMensaje("No se ha efectuado el eliminado del alumno con nia "+niaEliminar+" ya que no lo ha confirmado");
+					vista.mostrarMensaje("No se ha eliminado con exito todos los alumnos que pertenecen al curso "+curso);
 				}
-				
-				
-
 				break;
 			case 9: 
 

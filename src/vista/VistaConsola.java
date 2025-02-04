@@ -5,28 +5,22 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 import java.util.StringTokenizer;
 import java.util.stream.IntStream;
 
-import dao.AlumnoDAOImpl;
 import model.Alumno;
-import model.AlumnoDAO;
 import model.Grupo;
 
 public class VistaConsola implements IVista{
 
-	Scanner sc= new Scanner(System.in);
-
+	private Scanner sc;
 	private KeyboardReader reader;
-	private AlumnoDAO dao;
-	private List<Alumno> alumnos= new ArrayList<Alumno>();
-
+	
 	public VistaConsola() {
 		reader= new KeyboardReader();
-
+		sc = new Scanner(System.in);
 	}
 
 
@@ -72,23 +66,28 @@ public class VistaConsola implements IVista{
 		System.out.println("-------------------------------\n");
 
 		System.out.print("Introduzca el nombre (sin apellidos) del alumno:"); 
-		String nombre= reader.nextLine();
+		String nombre= sc.nextLine();
+		sc.nextLine();
 		System.out.print("Introduzca los apellidos del alumno:"); 
-		String apellidos= reader.nextLine();
+		String apellidos= sc.nextLine();
+		sc.nextLine();
 		System.out.print("Introduzca la fecha de nacimiento del alumno(formato dd/MM/yyyy):"); 
 		LocalDate fechaNacimiento= reader.nextLocalDate();
 		System.out.print("Introduzca el genero del alumno:"); 
-		String genero= reader.nextLine();
+		String genero= sc.nextLine();
+		sc.nextLine();
 		System.out.print("Introduzca el ciclo del alumno:"); 
-		String ciclo= reader.nextLine();
+		String ciclo= sc.nextLine();
+		sc.nextLine();
 		System.out.print("Introduzca el curso del alumno:"); 
-		String curso= reader.nextLine();
+		String curso= sc.nextLine();
+		sc.nextLine();
 		System.out.print("Introduzca el grupo del alumno:"); 
-		String grupo= reader.nextLine();
+		int grupo= sc.nextInt();
 
 		System.out.println();
 		System.out.println();
-		Alumno a=new Alumno( nombre,  apellidos,  fechaNacimiento, genero.charAt(0),  ciclo,  curso,  Integer.parseInt(curso));
+		Alumno a=new Alumno( nombre,  apellidos,  fechaNacimiento, genero.charAt(0),  ciclo,  curso, grupo);
 
 		return a;
 	}
@@ -100,7 +99,7 @@ public class VistaConsola implements IVista{
 		System.out.println("-------------------------------\n");
 
 		System.out.print("Introduzca el nombre del grupo:"); 
-		String nombre= reader.nextLine();
+		String nombre= sc.nextLine();
 
 		Grupo grupo= new Grupo(nombre);
 		return grupo;
@@ -237,34 +236,9 @@ public class VistaConsola implements IVista{
 			return st.nextToken();
 		}
 
-		int nextInt() {
-			return Integer.parseInt(next());
-		}
-
-		double nextDouble() {
-			return Double.parseDouble(next());
-		}
-
-
-
 		LocalDate nextLocalDate() {
 			return LocalDate.parse(next(),DateTimeFormatter.ofPattern(FORMATO_FECHA));
 		}
 
-		String nextLine() {
-			String str="";
-			try {
-				if(st.hasMoreElements()) {
-					str=st.nextToken("\n");
-				}else {
-					str= br.readLine();
-				}
-			}catch(IOException e) {
-				System.err.println("Error leyendo del teclado");
-				e.printStackTrace();
-			}
-
-			return str;
-		}
 	}
 }
