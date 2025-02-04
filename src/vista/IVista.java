@@ -1,6 +1,6 @@
 package vista;
 
-import java.util.ArrayList;
+
 import java.util.List;
 
 import model.Alumno;
@@ -19,10 +19,21 @@ public interface IVista {
 		void mostrarAlumnos(List<Alumno> alumnos);
 		
 		void mostrarRutaDeFichero(String ruta);
-
+		
 		void mostrarCursos(List<String> cursos);
 	   
 		void mostrarMensaje(String mensaje);
 		
 		String pedirRuta();
+		
+		int pedirNia();
+		
+		String pedirNombre();
+		
+		boolean pedirConfirmacion();
+		
+		String pedirCurso();
+
+		
+		
 }

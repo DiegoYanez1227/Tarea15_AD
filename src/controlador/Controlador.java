@@ -1,14 +1,8 @@
 package controlador;
 
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
 import java.util.List;
 
-import ficheros.FicheroJSON;
-import ficheros.FicheroTXT;
-import ficheros.IFichero;
-
+import ficheros.*;
 import model.*;
 import vista.*;
 
@@ -70,8 +64,6 @@ public class Controlador {
 				}else {
 					vista.mostrarMensaje("No se ha podido exportar los datos dentro de un fichero de texto.");
 				}
-					
-				
 				break;
 			case 5: 
 				//LEER ALUMNOS DESDE UN FICHERO DE TEXTO Y GUARDARLOS EN LA BASE DE DATOS
@@ -84,15 +76,39 @@ public class Controlador {
 				}else {
 					vista.mostrarMensaje("No se ha podido mostrar los alumnos desde el fichero de texto debido a un error.");
 				}
-				
 				break;
 			case 6: 
-
+				// MODIFICAR EL NOMBRE DE UN ALUMNO SEGUN SU NIA
+				int nia= vista.pedirNia();
+				Alumno alumnoUpdate =modelo.obtenerAlumnoPorNIA(nia);
+				vista.mostrarMensaje("Aqui esta el alumno con nia "+ nia+ " del quieres cambiar el nombre.");
+				vista.mostrarAlumno(alumnoUpdate);
+				String nombre= vista.pedirNombre();
+				modelo.modificarNombrePorNia(nia, nombre);
 				break;
 			case 7: 
-
+				//ELIMINARO ALUMNO SEGUN EL NIA
+				int niaEliminar= vista.pedirNia();
+				if(vista.pedirConfirmacion()) {
+					modelo.eliminarPorNia(niaEliminar);
+					vista.mostrarMensaje("Se ha efectuado el eliminado del alumno con nia "+niaEliminar);
+				}else {
+					vista.mostrarMensaje("No se ha efectuado el eliminado del alumno con nia "+niaEliminar+" ya que no lo ha confirmado");
+				}
 				break;
 			case 8: 
+				//ELIMINAR TODOS LOS ALUMNOS DE UN CURSO
+				List<String> cursos= modelo.mostrarCursos();
+				vista.mostrarCursos(cursos);
+				String curso= vista.pedirCurso();
+				if(vista.pedirConfirmacion()) {
+					modelo.eliminarPorCurso(curso);
+					vista.mostrarMensaje("Se ha eliminado con exito todos los alumnos que pertenecen a ");
+				}else {
+					vista.mostrarMensaje("No se ha efectuado el eliminado del alumno con nia "+niaEliminar+" ya que no lo ha confirmado");
+				}
+				
+				
 
 				break;
 			case 9: 

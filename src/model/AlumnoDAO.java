@@ -29,6 +29,8 @@ public interface AlumnoDAO {
 	
 	void eliminarPorCurso(String curso);					//delete Curso
 	
+	List<String> mostrarCursos();
+	
 	
 }
 

@@ -41,16 +41,16 @@ public class AlumnoBD implements AlumnoDAO{
 
 	@Override
 	public int aniadirAlumnos(List<Alumno> alumnos) {
-		
+
 		int result=0;
 		for (Alumno alumno : alumnos) {
 			aniadirAlumno(alumno);
 			result ++;
 		}
-		
+
 		return result;
 	}
-	
+
 	@Override
 	public int aniadirGrupo(Grupo grupo) {
 		String sql="""
@@ -101,20 +101,20 @@ public class AlumnoBD implements AlumnoDAO{
 
 	@Override
 	public int modificarNombrePorNia(int nia, String nombre) {
-		Alumno alumno=obtenerAlumno(nia);
+		Alumno alumno=obtenerAlumnoPorNIA(nia);
 		// Actualizar los datos en la base de datos
 		String sql = "UPDATE alumnos SET nombre = ? WHERE nia = ?";
 
 		int filasActualizadas=0;
 		try(Connection conexion = MyDataSource.getConnection();
-			PreparedStatement sentencia = conexion.prepareStatement(sql);
-			ResultSet rs = sentencia.executeQuery()){
+				PreparedStatement sentencia = conexion.prepareStatement(sql);
+				ResultSet rs = sentencia.executeQuery()){
 
 			sentencia.setString(1, nombre);
 			sentencia.setInt(2, nia);
 
 			return filasActualizadas= sentencia.executeUpdate();
-			
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -131,7 +131,7 @@ public class AlumnoBD implements AlumnoDAO{
 
 			sentencia.setInt(1, nia);
 			sentencia.executeQuery();
-			
+
 			int filasEliminadas = sentencia.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -147,10 +147,10 @@ public class AlumnoBD implements AlumnoDAO{
 		try (Connection conexion = MyDataSource.getConnection();
 				PreparedStatement sentencia = conexion.prepareStatement(sql);
 				ResultSet rs = sentencia.executeQuery(sql)) {
-			
-				sentencia.setString(1, curso);
-				sentencia.executeQuery();
-				
+
+			sentencia.setString(1, curso);
+			sentencia.executeQuery();
+
 			int filasEliminadas = sentencia.executeUpdate();
 		} catch (SQLException e) {
 			System.err.println("Error al eliminar alumnos: " + e.getMessage());
@@ -158,45 +158,28 @@ public class AlumnoBD implements AlumnoDAO{
 
 	}
 
-	private void mostrarCursos() {
-		String sql = "SELECT DISTINCT curso FROM alumno";
+	@Override
+	public List<String> mostrarCursos() {
+	    String sql = "SELECT DISTINCT curso FROM alumno";
+	    List<String> cursos = new ArrayList<>();
 
-		try (Connection conexion = MyDataSource.getConnection();
-				PreparedStatement sentencia = conexion.prepareStatement(sql);
-				ResultSet rs = sentencia.executeQuery(sql)) {
+	    try (Connection conexion = MyDataSource.getConnection();
+	         PreparedStatement sentencia = conexion.prepareStatement(sql);
+	         ResultSet rs = sentencia.executeQuery()) {
 
-			while (rs.next()) {
-				String curso = rs.getString("curso");
-				System.out.println("- " + curso);
-			}
-		} catch (SQLException e) {
-			System.err.println("Error al obtener los cursos: " + e.getMessage());
-		}
+	        while (rs.next()) {
+	            String curso = rs.getString("curso");
+	            cursos.add(curso); 
+	        }
+
+	    } catch (SQLException e) {
+	        System.err.println("Error al obtener los cursos: " + e.getMessage());
+	        return null;
+	    }
+	    return cursos;
 	}
 
-	public Alumno obtenerAlumno(int nia) {
-
-		Alumno result = null;
-
-		String sql = "SELECT nia, nombre, apellidos, fecha_nacimiento, genero, ciclo, curso, grupo FROM alumno where nia=?";
-		try (Connection conexion = MyDataSource.getConnection();
-				PreparedStatement sentencia = conexion.prepareStatement(sql)){
-
-			sentencia.setInt(1, nia);
-
-			try(ResultSet rs = sentencia.executeQuery()){
-
-				//usamos el if porque solo obtendremos un dato
-				if(rs.next()) {
-					result= new Alumno();
-					generarAlumno(rs, result);
-				}
-			}
-		}catch(SQLException e) {
-			e.printStackTrace();
-		}
-		return result;
-	}
+	
 
 	private void generarAlumno(ResultSet rs, Alumno alumno) throws SQLException {
 		alumno.setNia(rs.getInt("nia"));
@@ -210,6 +193,30 @@ public class AlumnoBD implements AlumnoDAO{
 		alumno.setGrupo(Integer.parseInt(rs.getString("grupo")));
 	}
 
-	
+	@Override
+	public Alumno obtenerAlumnoPorNIA(int nia) {
+		String sql = "SELECT nia, nombre, apellidos, fecha_nacimiento, genero, ciclo, curso, grupo FROM alumno WHERE nia= ?";
+
+		Alumno alumno = null;
+
+		try(Connection conexion = MyDataSource.getConnection();
+			PreparedStatement sentencia = conexion.prepareStatement(sql)){
+
+			sentencia.setInt(1, nia);
+			try (ResultSet rs = sentencia.executeQuery()) {
+				if (rs.next()) {
+					alumno = new Alumno();
+					generarAlumno(rs, alumno);
+				}
+			}
+		}catch(SQLException e) {
+			//Loggers
+			return null;
+		}
+		return alumno;
+
+	}
+
+
 
 }
