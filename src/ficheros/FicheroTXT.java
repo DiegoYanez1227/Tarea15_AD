@@ -8,9 +8,9 @@ import java.util.List;
 import model.Alumno;
 import model.AppendingObjectOutputStream;
 
-public class FicheroTXT implements IFichero{
+public class FicheroTXT {
 
-	@Override
+	
 	public String generarFichero(List<Alumno> alumnos) {
 		int result = 0;
 
@@ -22,12 +22,11 @@ public class FicheroTXT implements IFichero{
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		//return result;
-
+	
 		return null;
 	}
 
-	@Override
+
 	public List<Alumno> leerFichero(String ruta) {
 		// TODO Auto-generated method stub
 		return null;

@@ -2,18 +2,19 @@ package ficheros;
 
 import java.util.List;
 
-import model.Alumno;
 
-public class FicheroJSON implements IFichero{
+import model.Grupo;
 
-	@Override
-	public String generarFichero(List<Alumno> alumnos) {
+public class FicheroJSON {
+
+	
+	public String generarFichero(List<Grupo> alumnos) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	@Override
-	public List<Alumno> leerFichero(String ruta) {
+	
+	public List<Grupo> leerFichero(String ruta) {
 		// TODO Auto-generated method stub
 		return null;
 	}

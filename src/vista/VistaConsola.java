@@ -25,8 +25,7 @@ public class VistaConsola implements IVista{
 
 
 	/*
-	 * Eliminar los alumnos del curso indicado por el usuario (debes
-		mostrarle previamente los cursos existentes).
+	 
 	* Guardar todos los grupos (con toda su información como
 		atributos) en un fichero XML o JSON. Para cada grupo se
 		guardará también el listado de alumnos de ese grupo. Los datos
