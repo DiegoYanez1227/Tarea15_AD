@@ -20,7 +20,7 @@ import model.Grupo;
 
 public class FicheroXML {
 	
-	private static final String RUTA_XML = "grupos.json";
+	private static final String RUTA_XML = "grupos.xml";
 
 	public String generarFichero(List<Grupo> grupos) {
         guardarComoXML(grupos);

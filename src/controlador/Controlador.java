@@ -72,9 +72,12 @@ public class Controlador {
 				leerDesdeFicheroJSON(modelo, vista);
 				break;
 			case 0: 
-				System.out.println("\n Saliendo del programa... \n");
+				//SALIR DEL PROGRAMA
+				vista.mostrarMensaje("Saliendo del programa...");
 				break;
 			default: 
+				//INTRODUCIDO NUMERO NO CORRECTO
+				//logger
 				System.err.println("El número introducido no se corresponde con una instruccion valida");
 			}
 
