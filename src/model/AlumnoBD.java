@@ -8,10 +8,18 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.logging.log4j.*;
+
 import pool.MyDataSource;
 
 public class AlumnoBD implements AlumnoDAO{
 
+	
+	static Logger Logger = LogManager.getLogger(AlumnoBD.class);
+		
+
+	
+	
 	@Override
 	public int aniadirAlumno(Alumno alumno) {
 		String sql="""
@@ -34,7 +42,7 @@ public class AlumnoBD implements AlumnoDAO{
 			return result= sentencia.executeUpdate();
 		}catch(SQLException e) {
 			e.printStackTrace();
-			//LOGGER
+			Logger.error("Error al introducir el alumno dentro de la base de datos");
 		}
 		return result;
 	}
@@ -47,7 +55,7 @@ public class AlumnoBD implements AlumnoDAO{
 			aniadirAlumno(alumno);
 			result ++;
 		}
-
+		Logger.info("Se ha completado con exito el añadido de todos los alumnos");
 		return result;
 	}
 
@@ -68,6 +76,7 @@ public class AlumnoBD implements AlumnoDAO{
 			return result= sentencia.executeUpdate();
 		}catch(SQLException e) {
 			e.printStackTrace();
+			Logger.error("Error al introducir el grupo dentro de la base de datos");
 		}
 		return result;
 	}
@@ -104,7 +113,7 @@ public class AlumnoBD implements AlumnoDAO{
 				alumnos.add(alumno);
 			}
 		}catch(SQLException e) {
-			//Loggers
+			Logger.error("Error al obtener todos los alumnos de dentro de la base de datos");
 			return null;
 		}
 		return alumnos;
@@ -127,6 +136,7 @@ public class AlumnoBD implements AlumnoDAO{
 			return filasActualizadas= sentencia.executeUpdate();
 
 		} catch (SQLException e) {
+			Logger.error("Error en la modificacion del nombre del alumno con nia "+nia);
 			e.printStackTrace();
 		}
 		return filasActualizadas;
@@ -146,13 +156,14 @@ public class AlumnoBD implements AlumnoDAO{
 			int filasEliminadas = sentencia.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
+			Logger.error("Error al eliminar el alumno con nia "+nia);
 		}		
 	}
 
 	@Override
 	public void eliminarPorCurso(String curso) {
 
-		mostrarCursos();
+		obtenerCursos();
 
 		String sql = "DELETE FROM alumno WHERE curso = ?";
 		try (Connection conexion = MyDataSource.getConnection();
@@ -164,13 +175,13 @@ public class AlumnoBD implements AlumnoDAO{
 
 			int filasEliminadas = sentencia.executeUpdate();
 		} catch (SQLException e) {
-			System.err.println("Error al eliminar alumnos: " + e.getMessage());
+			Logger.error("Error al eliminar los alumnos que pertenecen al curso: "+curso);
 		}
 
 	}
 
 	@Override
-	public List<String> mostrarCursos() {
+	public List<String> obtenerCursos() {
 	    String sql = "SELECT DISTINCT curso FROM alumno";
 	    List<String> cursos = new ArrayList<>();
 
@@ -184,7 +195,7 @@ public class AlumnoBD implements AlumnoDAO{
 	        }
 
 	    } catch (SQLException e) {
-	        System.err.println("Error al obtener los cursos: " + e.getMessage());
+	    	Logger.error("Error al obtener los cursos");
 	        return null;
 	    }
 	    return cursos;
@@ -227,7 +238,7 @@ public class AlumnoBD implements AlumnoDAO{
 				}
 			}
 		}catch(SQLException e) {
-			//Loggers
+			Logger.error("Error al obtener el alumno con nia "+nia);
 			return null;
 		}
 		return alumno;
@@ -236,7 +247,7 @@ public class AlumnoBD implements AlumnoDAO{
 
 	@Override
 	public List<Grupo> obtenerTodosLosGrupos() {
-		String sql = "SELECT nia, nombre, apellidos, fecha_nacimiento, genero, ciclo, curso, grupo FROM alumno";
+		String sql = "SELECT id_grupo, nombre FROM grupos";
 
 		List <Grupo> grupos = null;
 
@@ -254,7 +265,7 @@ public class AlumnoBD implements AlumnoDAO{
 				grupos.add(grupo);
 			}
 		}catch(SQLException e) {
-			//Loggers
+			Logger.error("Error al obtener todos los grupos");
 			return null;
 		}
 		return grupos;

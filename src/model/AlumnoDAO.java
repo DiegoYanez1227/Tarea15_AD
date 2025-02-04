@@ -91,5 +91,5 @@ public interface AlumnoDAO {
      * 
      * @return Una lista de cursos.
      */
-    List<String> mostrarCursos();
+    List<String> obtenerCursos();
 }
