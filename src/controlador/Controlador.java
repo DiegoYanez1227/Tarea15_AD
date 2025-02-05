@@ -88,7 +88,8 @@ public class Controlador {
 				break;
 			default:
 				// Introducción de un número no válido
-				System.err.println("El número introducido no se corresponde con una instrucción válida");
+				vista.mostrarMensaje("El número introducido no se corresponde con una instrucción válida");
+				Logger.error("El número introducido no se corresponde con una instrucción válida");
 			}
 		} while (opcion != 0);
 	}
